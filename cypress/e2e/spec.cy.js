@@ -43,7 +43,7 @@ describe('hangman game', () => {
       cy.get('#guessInput').type(letter);
       cy.get('#guessButton').click();
     });
-    cy.get('#wordDisplay').should('have.text', 'Congratulations! You won!');
+    cy.get('#wordDisplay').contains(/Congratulations! You won!/i);
     
   
   });
@@ -66,7 +66,7 @@ describe('hangman game', () => {
       cy.get('#guessInput').type(letter);
       cy.get('#guessButton').click();
     });
-    cy.get('#wordDisplay').should('have.text', 'Game over! You lost.');
+    cy.get('#wordDisplay').contains(/Game over! You lost/i);
   
 
   

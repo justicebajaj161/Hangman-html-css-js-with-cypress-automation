@@ -1,5 +1,4 @@
 const webpageUrl = `index.html`;
-
 describe('hangman game', () => {
   function rgbToColorName(rgb) {
     const colorMap = {
@@ -7,10 +6,8 @@ describe('hangman game', () => {
       'rgb(0, 128, 0)': 'green'
       // Add other color mappings as needed
     };
-
     return colorMap[rgb] || rgb;
   }
-
   beforeEach(() => {
     cy.visit(webpageUrl, {
       onBeforeLoad: (win) => {
@@ -21,11 +18,10 @@ describe('hangman game', () => {
       }
     });
   });
-
   it('starts with a word to guess represented by underscores', () => {
     cy.get('#wordDisplay').contains(/_/i);
+    // should check the length of _ as well?????????????
   });
-
   it('reveals the letter when the user guesses correctly', () => {
     cy.get('#guessInput').type('j');
     cy.get('#guessButton').click();
@@ -36,7 +32,6 @@ describe('hangman game', () => {
     cy.get('#guessButton').click();
     cy.get('.head').should('be.visible');
   });
-
   it('displays a victory message ', () => {
     const correctGuesses = 'javascript'.split('');
     correctGuesses.forEach(letter => {
@@ -44,10 +39,7 @@ describe('hangman game', () => {
       cy.get('#guessButton').click();
     });
     cy.get('#wordDisplay').contains(/Congratulations! You won!/i);
-    
-  
   });
-
   it('turns the background green when the user wins',()=>{
     const correctGuesses = 'javascript'.split('');
     correctGuesses.forEach(letter => {
@@ -59,7 +51,6 @@ describe('hangman game', () => {
       expect(rgbToColorName(bgcolor)).to.equal('green');
     });
   })
-
   it('displays a loss message ', () => {
     const wrongGuesses = ['z', 'x', 'w', 'q', 'k', 'l'];  // Assuming these letters aren't in the word
     wrongGuesses.forEach(letter => {
@@ -67,11 +58,20 @@ describe('hangman game', () => {
       cy.get('#guessButton').click();
     });
     cy.get('#wordDisplay').contains(/Game over! You lost/i);
-  
-
-  
   });
-
+  it('after losing all body parts should display', () => {
+    const wrongGuesses = ['z', 'x', 'w', 'q', 'k', 'l'];  // Assuming these letters aren't in the word
+    wrongGuesses.forEach(letter => {
+      cy.get('#guessInput').type(letter);
+      cy.get('#guessButton').click();
+    });
+    cy.get('.head').should('be.visible');
+    cy.get('.body').should('be.visible');
+    cy.get('.left-arm').should('be.visible');
+    cy.get('.right-arm').should('be.visible');
+    cy.get('.left-leg').should('be.visible');
+    cy.get('.right-leg').should('be.visible');
+  });
   it('turns the background red when the user loses',()=>{
     const wrongGuesses = ['z', 'x', 'w', 'q', 'k', 'l'];  // Assuming these letters aren't in the word
     wrongGuesses.forEach(letter => {
@@ -105,5 +105,4 @@ describe('hangman game', () => {
     cy.get('#guessInput').should('be.disabled');
     cy.get('#guessButton').should('be.disabled');
   });
-
 });
